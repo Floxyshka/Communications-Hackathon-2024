@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Сплайс-пластины</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Название</th>
+            <th scope="col">Расположение</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tray in object_list %}
+        <tr>
+            <td>{{ tray.name }}</td>
+            <td>{{ tray.location }}</td>
+            <td>
+                <a href="{% url 'plugins:netbox_access_lists:splicetray_edit' pk=tray.pk %}" class="btn btn-sm btn-warning"><i class="mdi mdi-pencil"></i> Редактировать</a>
+                 
+                <form action="{% url 'plugins:netbox_access_lists:splicetray_delete' pk=tray.pk %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="mdi mdi-delete"></i> Удалить</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'plugins:netbox_access_lists:splicetray_add' %}" class="btn btn-primary">Добавить новую пластину</a>
+{% endblock %}

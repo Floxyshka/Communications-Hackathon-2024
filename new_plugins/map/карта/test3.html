@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подробная карта Екатеринбурга</title>
+
+    <!-- Подключаем локальные стили для MapLibre GL JS -->
+    <link href="dist/maplibre-gl.css" rel="stylesheet" />
+
+    <style>
+        /* Устанавливаем размер для контейнера карты */
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+        /* Стили для маркеров */
+        .start-marker, .end-marker {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Для треугольников, если нужно */
+        .start-marker::after, .end-marker::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid red;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div> <!-- Контейнер для карты -->
+
+    <!-- Подключаем локальную библиотеку MapLibre GL JS -->
+    <script src="dist/maplibre-gl.js"></script>
+
+    <!-- Инициализация карты -->
+    <div id="map"></div>
+<script>
+    const map = new maplibregl.Map({
+        container: 'map',
+        style:
+            'https://api.maptiler.com/maps/streets/style.json?key=bbdyKNlMTByoyVX0PHjU',
+        center: [60.68568,56.83817],
+        zoom: 15
+    });
+
+    map.on('load', () => {
+        map.addSource('route', {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': [
+                        [60.6943562,56.834912],  // Начальная точка
+                        [60.683515,56.83522],
+                        [60.68187,56.83574],
+                        [60.67979,56.83824],
+                        [60.67845,56.84205]  // Конечная точка
+                    ]
+                }
+            }
+        });
+
+        // Добавляем маршрут
+        map.addLayer({
+            'id': 'route',
+            'type': 'line',
+            'source': 'route',
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': '#255',
+                'line-width': 8
+            }
+        });
+
+        // Добавляем маркеры на начальную и конечную точку
+        new maplibregl.Marker({ color: 'black' })
+            .setLngLat([60.6943562, 56.834912]) // Начальная точка
+            .setPopup(new maplibregl.Popup().setHTML("<image src='dist/myfta.jpg' alt='End' height='150%' width='150%'/>"))
+            .addTo(map);
+
+        new maplibregl.Marker({ color: 'black' })
+            .setLngLat([60.67845, 56.84205]) // Конечная точка
+            .setPopup(new maplibregl.Popup().setHTML("<image src='dist/myfta.jpg' alt='End' height='150%' width='150%'/>"))
+            .addTo(map);
+    });
+</script>
+</body>
+</html>

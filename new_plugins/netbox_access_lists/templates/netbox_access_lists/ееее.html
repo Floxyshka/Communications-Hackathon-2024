@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подробная карта Екатеринбурга</title>
+
+    <!-- Подключаем локальные стили для MapLibre GL JS -->
+    <link href="dist/maplibre-gl.css" rel="stylesheet" />
+
+    <style>
+        /* Устанавливаем размер для контейнера карты */
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div> <!-- Контейнер для карты -->
+
+    <!-- Подключаем локальную библиотеку MapLibre GL JS -->
+    <script src="dist/maplibre-gl.js"></script>
+
+    <!-- Инициализация карты -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof maplibregl !== 'undefined') {
+                // Инициализация карты с использованием стиля MapTiler для OpenStreetMap
+                const map = new maplibregl.Map({
+                    container: 'map',  // ID контейнера для карты
+                    style: 'https://api.maptiler.com/maps/openstreetmap/style.json?key=bbdyKNlMTByoyVX0PHjU',  // Стиль карты OpenStreetMap от MapTiler
+                    center: [60.6000, 56.8380],  // Центр карты (Екатеринбург)
+                    zoom: 12,  // Начальный уровень масштабирования
+                    hash: true  // Включаем отображение координат в URL
+                });
+
+                // Добавляем элементы управления
+                map.addControl(new maplibregl.NavigationControl());
+                map.addControl(new maplibregl.FullscreenControl());
+
+                // Добавляем всплывающее окно при клике на карту
+                map.on('click', function(e) {
+                    new maplibregl.Popup()
+                        .setLngLat(e.lngLat)
+                        .setHTML('<h3>Вы находитесь здесь!</h3>')
+                        .addTo(map);
+                });
+            } else {
+                // Если MapLibre GL JS не был загружен, выводим ошибку
+                console.error("MapLibre GL JS не был загружен.");
+            }
+        });
+    </script>
+</body>
+</html>

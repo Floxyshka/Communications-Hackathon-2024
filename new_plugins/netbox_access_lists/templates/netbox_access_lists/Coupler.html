@@ -1,0 +1,35 @@
+{% extends 'generic/_base.html' %}
+{% load static%}
+
+{% block page_title %}
+    Добавление муфты
+{% endblock %}
+
+<link rel="stylesheet" href="{% static 'netbox_access_lists/css/vendor.css' %}">
+<link rel="stylesheet" href="{% static 'netbox_access_lists/css/app.css' %}">
+{% block content %}
+    <h2>Добавление муфты</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label for="name">Название:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+        <label for="manufacturer">Производитель:</label>
+        <select id="manufacturer" name="manufacturer" required>
+            {% for manufacturer in manufacturers %}
+                <option value="{{ manufacturer.id }}">{{ manufacturer.name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="type">Тип:</label>
+        <input type="text" id="type" name="type">
+        <br><br>
+        <label for="wavelength">Длина волны (нм):</label>
+        <input type="number" step="any" id="wavelength" name="wavelength">
+        <br><br>
+        <label for="comments">Комментарии:</label>
+        <textarea id="comments" name="comments" rows="4" cols="50"></textarea>
+        <br><br>
+        <input type="submit" value="Добавить">
+    </form>
+{% endblock %}
